@@ -2,12 +2,14 @@ import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
 import { __prod__ } from "./constants";
 import { Post } from "./entities/Post";
+import { Dojo } from "./entities/Dojo";
 import microConfig from "./mikro-orm.config";
 import express from 'express';
 import {ApolloServer} from 'apollo-server-express';
 import {buildSchema} from 'type-graphql';
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
+import { DojoResolver } from "./resolvers/dojo";
 
 const main = async () => {
 
@@ -16,17 +18,18 @@ const main = async () => {
     await orm.getMigrator().up();
     
     // sample data creation commands
-//    const post = orm.em.create(Post, {title: 'my first post'});
-//    await orm.em.persistAndFlush(post);
+//    const dojo = orm.em.create(Dojo, ({id: 1, title: 'Bath SKY Taekwondo', styles: 'WT Taekwondo'}))
 
-//    const posts = await orm.em.find(Post, {});
-//    console.log(posts);
+//    await orm.em.persistAndFlush(dojo);
+
+//    const dojos = await orm.em.find(Dojo, {});
+//    console.log(dojos);
 
     const app = express();
     
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [HelloResolver, PostResolver],
+            resolvers: [HelloResolver, PostResolver, DojoResolver],
             validate: false
         }),
         context: () => ({ em: orm.em })

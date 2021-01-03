@@ -20,4 +20,6 @@ export class Post {
   @Field()
   @Property({type: 'text'})
   title!: string;
+
+  //comment out the Field to not expose database info via graphql
 }

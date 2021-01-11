@@ -3,6 +3,7 @@ import { Post } from "./entities/Post";
 import { Dojo } from "./entities/Dojo";
 import {MikroORM} from "@mikro-orm/core";
 import path from 'path';
+import { User } from "./entities/User";
 
 
 export default {
@@ -10,7 +11,7 @@ export default {
           path: path.join(__dirname, "./migrations"),
           pattern: /^[\w-]+\d+\.[tj]s$/, 
         },
-        entities: [Post, Dojo],
+        entities: [Post, Dojo, User],
         dbName: 'opendojo',
         user: 'postgres',
         password: 'postgres',

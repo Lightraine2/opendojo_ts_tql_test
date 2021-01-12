@@ -11,6 +11,11 @@ import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import { DojoResolver } from "./resolvers/dojo";
 import { UserResolver } from "./resolvers/user";
+import redis from 'redis';
+import session from 'express-session';
+import connectRedis from 'connect-redis';
+
+
 
 const main = async () => {
 
@@ -27,6 +32,18 @@ const main = async () => {
 //    console.log(dojos);
 
     const app = express();
+
+    let RedisStore = connectRedis(session)
+let redisClient = redis.createClient()
+
+app.use(
+    session({
+        store: new RedisStore({client: redisClient}),
+        secret: 'keyboard cat',
+        resave: false,
+    })
+)
+
     
     const apolloServer = new ApolloServer({
         schema: await buildSchema({

@@ -14,6 +14,7 @@ import { UserResolver } from "./resolvers/user";
 import redis from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
+import { MyContext } from "./types";
 
 
 
@@ -38,8 +39,20 @@ let redisClient = redis.createClient()
 
 app.use(
     session({
-        store: new RedisStore({client: redisClient}),
-        secret: 'keyboard cat',
+        name: 'qid',
+
+        store: new RedisStore({
+            client: redisClient,
+            disableTouch: true,
+            
+        }),
+        cookie: {
+            maxAge: 1000 * 15,
+            sameSite: 'lax',
+            httpOnly: true,
+            secure: __prod__
+        },
+        secret: '123456789qwerty',
         resave: false,
     })
 )
@@ -50,7 +63,7 @@ app.use(
             resolvers: [HelloResolver, PostResolver, DojoResolver, UserResolver],
             validate: false
         }),
-        context: () => ({ em: orm.em })
+        context: ({req, res}): MyContext => ({ em: orm.em, req, res }),
     });
 
     apolloServer.applyMiddleware({app});

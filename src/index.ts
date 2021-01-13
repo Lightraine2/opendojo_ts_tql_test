@@ -52,6 +52,7 @@ app.use(
             httpOnly: true,
             secure: __prod__
         },
+        saveUninitialized: false,
         secret: '123456789qwerty',
         resave: false,
     })

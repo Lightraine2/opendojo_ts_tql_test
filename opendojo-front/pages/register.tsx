@@ -1,6 +1,6 @@
 import { resolveHref } from "next/dist/next-server/lib/router/router";
 import {Formik, Form} from 'formik';
-import {Wrapper} from "../components/Wrapper";
+import {Wrapper} from "../components/wrapper";
 import React from 'react';
 import { FormControl, FormErrorMessage, FormLabel, Button, Input, Box }from "@chakra-ui/core";
 import {InputField} from "../components/InputField";

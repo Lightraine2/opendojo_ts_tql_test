@@ -14,7 +14,7 @@ import { UserResolver } from "./resolvers/user";
 import redis from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
-import { MyContext } from "./types";
+import cors from 'cors';
 
 
 
@@ -34,8 +34,16 @@ const main = async () => {
 
     const app = express();
 
-    let RedisStore = connectRedis(session)
-let redisClient = redis.createClient()
+    const RedisStore = connectRedis(session)
+    const redisClient = redis.createClient()
+
+// this is relaxing cors for everything but you can define routes before the call to the cors function
+app.use(
+    cors({
+        origin: "http://127.0.0.1:3000",
+        credentials: true,
+    })
+);
 
 app.use(
     session({
@@ -64,10 +72,13 @@ app.use(
             resolvers: [HelloResolver, PostResolver, DojoResolver, UserResolver],
             validate: false
         }),
-        context: ({req, res}): MyContext => ({ em: orm.em, req, res }),
+        context: ({req, res}) => ({ em: orm.em, req, res }),
     });
 
-    apolloServer.applyMiddleware({app});
+    apolloServer.applyMiddleware({
+        app,
+        cors: false,
+    });
     
     app.listen(4000, () => {
         console.log('server started on localhost:4000')

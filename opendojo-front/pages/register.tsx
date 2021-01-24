@@ -5,6 +5,7 @@ import React from 'react';
 import { FormControl, FormErrorMessage, FormLabel, Button, Input, Box }from "@chakra-ui/core";
 import {InputField} from "../components/InputField";
 import { useRegisterMutation } from "../generated/graphql";
+import { toErrorMap } from "../utils/toErrorMap";
 
 interface registerProps {
 
@@ -24,11 +25,7 @@ const Register: React.FC<registerProps> = ({}) => {
          const response = await register(values);
          if (response.data?.register.errors) {
              [{field: 'username', message: 'something wrong'}]
-            setErrors(
-                {
-                    username: "error"
-                }
-            )
+            setErrors(toErrorMap(response.data.register.errors));
          }
         }}
         >
